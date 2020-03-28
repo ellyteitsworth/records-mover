@@ -3,6 +3,7 @@ from .format_hints import bluelabs_format_hints, csv_format_hints, vertica_forma
 from records_mover.records.pandas import pandas_read_csv_options
 from records_mover.records.processing_instructions import ProcessingInstructions
 from records_mover.records.records_format import DelimitedRecordsFormat
+from records_mover.records.schema import RecordsSchema
 
 
 class TestPandasReadCsvOptions(unittest.TestCase):
@@ -21,10 +22,16 @@ class TestPandasReadCsvOptions(unittest.TestCase):
             'quoting': 3,
             'warn_bad_lines': True
         }
+        records_schema = RecordsSchema.from_data({
+            'schema': 'bltypes/v1',
+        })
         processing_instructions = ProcessingInstructions()
         records_format = DelimitedRecordsFormat(hints=bluelabs_format_hints)
         unhandled_hints = set()
-        actual = pandas_read_csv_options(records_format, unhandled_hints, processing_instructions)
+        actual = pandas_read_csv_options(records_format,
+                                         records_schema,
+                                         unhandled_hints,
+                                         processing_instructions)
         self.assertEqual(expected, actual)
         self.assertFalse(unhandled_hints)
 
@@ -42,10 +49,16 @@ class TestPandasReadCsvOptions(unittest.TestCase):
             'quoting': 0,
             'warn_bad_lines': True
         }
+        records_schema = RecordsSchema.from_data({
+            'schema': 'bltypes/v1',
+        })
         processing_instructions = ProcessingInstructions()
         records_format = DelimitedRecordsFormat(hints=csv_format_hints)
         unhandled_hints = set()
-        actual = pandas_read_csv_options(records_format, unhandled_hints, processing_instructions)
+        actual = pandas_read_csv_options(records_format,
+                                         records_schema,
+                                         unhandled_hints,
+                                         processing_instructions)
         self.assertEqual(expected, actual)
         self.assertFalse(unhandled_hints)
 
@@ -64,9 +77,15 @@ class TestPandasReadCsvOptions(unittest.TestCase):
             'quoting': 3,
             'warn_bad_lines': True
         }
+        records_schema = RecordsSchema.from_data({
+            'schema': 'bltypes/v1',
+        })
         processing_instructions = ProcessingInstructions()
         records_format = DelimitedRecordsFormat(hints=vertica_format_hints)
         unhandled_hints = set()
-        actual = pandas_read_csv_options(records_format, unhandled_hints, processing_instructions)
+        actual = pandas_read_csv_options(records_format,
+                                         records_schema,
+                                         unhandled_hints,
+                                         processing_instructions)
         self.assertEqual(expected, actual)
         self.assertFalse(unhandled_hints)

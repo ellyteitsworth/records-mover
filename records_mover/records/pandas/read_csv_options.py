@@ -3,14 +3,16 @@ from ...utils import quiet_remove
 from ..hints import cant_handle_hint
 from ..processing_instructions import ProcessingInstructions
 from ..records_format import DelimitedRecordsFormat
+from records_mover.records.schema import RecordsSchema
 import logging
-from typing import Set, Dict, Any
+from typing import Set, Dict, Any, Optional
 
 
 logger = logging.getLogger(__name__)
 
 
 def pandas_read_csv_options(records_format: DelimitedRecordsFormat,
+                            records_schema: RecordsSchema,
                             unhandled_hints: Set[str],
                             processing_instructions: ProcessingInstructions) -> Dict[str, Any]:
     ...
