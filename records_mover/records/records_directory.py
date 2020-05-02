@@ -7,16 +7,18 @@ from .schema import RecordsSchema
 from urllib.parse import urlparse
 from ..url.base import BaseDirectoryUrl, BaseFileUrl
 from .records_format import BaseRecordsFormat, DelimitedRecordsFormat
-from typing import Mapping, IO, List, Optional
+from typing import Mapping, IO, List, Optional, Generic, TypeVar
 from .types import UrlDetails, RecordsManifestWithLength, LegacyRecordsManifest
 
 
 logger = logging.getLogger(__name__)
 
+T = TypeVar('T', bound=BaseDirectoryUrl)
 
-class RecordsDirectory:
+
+class RecordsDirectory(Generic[T]):
     def __init__(self,
-                 records_loc: BaseDirectoryUrl) -> None:
+                 records_loc: T) -> None:
         self.loc = records_loc
         self.scheme = records_loc.scheme
         self.schema_sql_file = RecordsSchemaSqlFile(self.loc)

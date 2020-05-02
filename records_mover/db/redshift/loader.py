@@ -61,7 +61,7 @@ class RedshiftLoader(LoaderFromRecordsDirectory):
         if not callable(getattr(loc, 'aws_creds', None)):
             raise NotImplementedError('Redshift can only load from an S3 bucket')
         else:
-            aws_creds: Optional[Credentials] = directory.loc.aws_creds()  # type: ignore
+            aws_creds: Optional[Credentials] = directory.loc.aws_creds()
             if aws_creds is None:
                 raise CredsDoNotSupportS3Import('Please provide AWS credentials '
                                                 '(run "aws configure")')
@@ -77,7 +77,7 @@ class RedshiftLoader(LoaderFromRecordsDirectory):
                                access_key_id=aws_creds.access_key,
                                secret_access_key=aws_creds.secret_key,
                                session_token=aws_creds.token, manifest=True,
-                               region=directory.loc.region,  # type: ignore
+                               region=directory.loc.region,
                                empty_as_null=True,
                                **redshift_options)  # type: ignore
             logger.info(f"Starting Redshift COPY from {directory}...")

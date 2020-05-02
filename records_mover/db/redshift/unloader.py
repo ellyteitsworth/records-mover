@@ -52,7 +52,7 @@ class RedshiftUnloader(Unloader):
         if not callable(getattr(loc, 'aws_creds')):
             raise NotImplementedError('Redshift can only load from an S3 bucket')
         else:
-            aws_creds: Optional[Credentials] = loc.aws_creds()  # type: ignore
+            aws_creds: Optional[Credentials] = loc.aws_creds()
             if aws_creds is None:
                 raise CredsDoNotSupportS3Export('Please provide AWS credentials '
                                                 '(run "aws configure")')
