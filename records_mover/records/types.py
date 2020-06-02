@@ -1,3 +1,4 @@
+from typing_inspect import get_args
 from typing import Dict, List
 from typing_extensions import Literal, TypedDict
 
@@ -42,5 +43,5 @@ UrlDetails = Dict[Url, UrlDetailsEntry]
 #
 RecordsFormatType = Literal['delimited', 'parquet']
 
-VALID_VARIANTS = ['dumb', 'csv', 'bigquery', 'bluelabs', 'vertica']
+
 DelimitedVariant = Literal['dumb', 'csv', 'bigquery', 'bluelabs', 'vertica']

@@ -1,6 +1,6 @@
 import logging
 from .processing_instructions import ProcessingInstructions
-from . import PartialRecordsHints, UntypedRecordsHints
+from . import PartialRecordsHints, UntypedRecordsHints, DelimitedVariant
 from .base_records_format import BaseRecordsFormat
 from typing import Mapping, Optional, TYPE_CHECKING
 from .delimited import ValidatedRecordsHints
@@ -25,7 +25,7 @@ class ParquetRecordsFormat(BaseRecordsFormat):
 
 
 class DelimitedRecordsFormat(BaseRecordsFormat):
-    variant: str
+    variant: DelimitedVariant
     # The strong type for 'hints' in the constructor is for IDE
     # support--we don't actually trust input to this class to be well-typed,
     # as it may come from public interface consumers.
@@ -35,7 +35,7 @@ class DelimitedRecordsFormat(BaseRecordsFormat):
     in the constructor"""
 
     def __init__(self,
-                 variant: str='bluelabs',
+                 variant: DelimitedVariant='bluelabs',
                  hints: PartialRecordsHints={},
                  processing_instructions: ProcessingInstructions=ProcessingInstructions()) -> None:
         """See the `records format documentation
@@ -70,7 +70,7 @@ class DelimitedRecordsFormat(BaseRecordsFormat):
         return DelimitedRecordsFormat(variant=self.variant,
                                       hints=input_hints)  # type: ignore
 
-    def alter_variant(self, variant: str) -> 'DelimitedRecordsFormat':
+    def alter_variant(self, variant: DelimitedVariant) -> 'DelimitedRecordsFormat':
         return DelimitedRecordsFormat(variant=variant,
                                       hints=self.hints)  # type: ignore
 
@@ -193,7 +193,7 @@ class DelimitedRecordsFormat(BaseRecordsFormat):
 
 
 def RecordsFormat(format_type: 'RecordsFormatType' = 'delimited',
-                  variant: str='bluelabs',
+                  variant: DelimitedVariant='bluelabs',
                   hints: PartialRecordsHints={},
                   processing_instructions:
                   ProcessingInstructions=ProcessingInstructions()) ->\

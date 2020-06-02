@@ -2,6 +2,8 @@ from .records_format import BaseRecordsFormat, DelimitedRecordsFormat, ParquetRe
 from ..url.base import BaseDirectoryUrl, BaseFileUrl
 from .processing_instructions import ProcessingInstructions
 from .delimited import PartialRecordsHints
+from typing import Optional, NoReturn, cast
+from records_mover.records.types import DelimitedVariant
 import logging
 
 logger = logging.getLogger(__name__)
@@ -25,10 +27,32 @@ class RecordsFormatFile:
         else:
             raise TypeError(f"Format type {format_type} not yet supported in this library")
 
+    def validate_variant(self,
+                         variant: str,
+                         fail_if_dont_understand: bool) -> DelimitedVariant:
+        # mypy way of validating we're covering all cases of an enum
+        #
+        # https://github.com/python/mypy/issues/6366#issuecomment-560369716
+        def invalid_variant(x: NoReturn) -> None:
+            if fail_if_dont_understand:
+                raise TypeError(f"Variant {x} not understood - "
+                                "perhaps records-mover needs to be upgraded?")
+
+        return_variant: DelimitedVariant = cast(DelimitedVariant, variant)
+        if (return_variant == 'dumb' or
+            return_variant == 'csv' or
+            return_variant == 'bigquery' or
+            return_variant == 'bluelabs' or
+           return_variant == 'vertica'):
+            return return_variant
+        else:
+            invalid_variant(return_variant)
+            return 'bluelabs'
+
     def load_delimited_format(self, format_loc: BaseFileUrl,
                               fail_if_dont_understand: bool) -> BaseRecordsFormat:
         data = format_loc.json_contents()
-        variant = None
+        variant: Optional[DelimitedVariant] = None
         hints: PartialRecordsHints = {}
         # For simple form (such as with avro or parquet), this file MUST be empty.
         if data is None:
@@ -45,7 +69,8 @@ class RecordsFormatFile:
         if not isinstance(potential_variant, str):
             raise TypeError(f"Invalid variant specified in {format_loc.url}: "
                             f"{potential_variant}")
-        variant = potential_variant
+        variant = self.validate_variant(potential_variant,
+                                        fail_if_dont_understand=fail_if_dont_understand)
         if 'hints' in data:
             hints = data['hints']
         processing_instructions =\

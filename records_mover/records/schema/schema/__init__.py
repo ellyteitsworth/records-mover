@@ -127,7 +127,7 @@ class RecordsSchema:
                 df = reader.read()
 
             fileobj.seek(0)
-
+purge_unnamed_unused_columns
             df = purge_unnamed_unused_columns(df)
             schema = RecordsSchema.from_dataframe(df, processing_instructions,
                                                   include_index=False)
