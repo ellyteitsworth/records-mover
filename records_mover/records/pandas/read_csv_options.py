@@ -431,9 +431,6 @@ def pandas_read_csv_options(records_format: DelimitedRecordsFormat,
         return (dateish_format.startswith('DD-MM-') or
                 dateish_format.startswith('DD/MM/'))
 
-    assert isinstance(hints.dateformat, str)
-    assert isinstance(hints.datetimeformat, str)
-    assert isinstance(hints.datetimeformattz, str)
     consistent_formats = (day_first(hints.dateformat) ==
                           day_first(hints.datetimeformat) ==
                           day_first(hints.datetimeformattz))
