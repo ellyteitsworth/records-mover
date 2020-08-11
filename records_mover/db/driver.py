@@ -25,6 +25,10 @@ class DBDriver(metaclass=ABCMeta):
         self.meta = MetaData()
 
     def has_table(self, schema: str, table: str) -> bool:
+        if self.db.dialect.name == "bigquery" and schema is not None:
+            print("DEBUG INFO: using logic on forked version")
+            table = f"{schema}.{table}"
+            schema = None
         return self.db.dialect.has_table(self.db, table_name=table, schema=schema)
 
     def table(self,
