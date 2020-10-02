@@ -58,8 +58,6 @@ def refine_field_from_series(field: 'RecordsSchemaField',
         if field_type is not None:
             if RecordsSchemaField.is_more_specific_type(field_type, field.field_type):
                 field.field_type = field_type
-                field.statistics = None
-                field.constraints = None
 
     if field.field_type == 'string':
         max_column_length = series.astype('str').map(len).max()

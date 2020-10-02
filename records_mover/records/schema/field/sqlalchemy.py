@@ -127,10 +127,6 @@ def field_from_sqlalchemy_column(column: Column,
 def field_to_sqlalchemy_type(field: 'RecordsSchemaField',
                              driver: 'DBDriver') -> sqlalchemy.types.TypeEngine:
     if field.field_type == 'integer':
-        if field.constraints and\
-           not isinstance(field.constraints, RecordsSchemaFieldIntegerConstraints):
-            raise SyntaxError(f"Incorrect constraint type in {field.name}: {field.constraints}")
-
         int_constraints =\
             cast(Optional[RecordsSchemaFieldIntegerConstraints], field.constraints)
         min_: Optional[int] = None
@@ -166,11 +162,11 @@ def field_to_sqlalchemy_type(field: 'RecordsSchemaField',
     elif field.field_type == 'string':
         if field.constraints and\
            not isinstance(field.constraints, RecordsSchemaFieldStringConstraints):
-            raise SyntaxError(f"Incorrect constraint type in {field.name}: {field.constraints}")
+            raise SyntaxError(f"Incorrect constraint type: {field.constraints}")
 
         if field.statistics and\
            not isinstance(field.statistics, RecordsSchemaFieldStringStatistics):
-            raise SyntaxError(f"Incorrect statistics type in {field.name}: {field.statistics}")
+            raise SyntaxError(f"Incorrect statistics type: {field.statistics}")
 
         string_constraints =\
             cast(Optional[RecordsSchemaFieldStringConstraints], field.constraints)
